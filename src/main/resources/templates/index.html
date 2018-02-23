@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl"
+	data-ng-app='canvasApp'>
+<head>
+<link th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}"
+	rel="stylesheet" />
+
+<meta charset="UTF-8">
+<title>The Game of Life</title>
+</head>
+<body data-ng-controller='sudokuController'>
+
+		<canvas id="sudokuBoard"></canvas>
+
+</body>
+<script th:src="@{/webjars/jquery/2.1.1/jquery.js}"></script>
+<script th:src="@{/webjars/angularjs/1.6.4/angular.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.js}"></script>
+<script th:src="@{/app/app.module.js}"></script>
+<script th:src="@{/app/components/sudoku/sudoku.controller.js}"></script>
+<script th:src="@{/app/components/sudoku/sudoku.service.js}"></script>
+
+</html>
