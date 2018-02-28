@@ -1,13 +1,13 @@
-package model.enums;
+package wt.sudoku.model.enums;
 
-public enum Col3PairType {
+public enum Row3PairType {
 	TOP_1, TOP_2, TOP_3, TOP_4, TOP_5, TOP_6, TOP_7, TOP_8, TOP_9,
 	MIDDLE_1, MIDDLE_2, MIDDLE_3, MIDDLE_4, MIDDLE_5, MIDDLE_6, MIDDLE_7, MIDDLE_8, MIDDLE_9,
 	BOTTOM_1, BOTTOM_2, BOTTOM_3, BOTTOM_4, BOTTOM_5, BOTTOM_6, BOTTOM_7, BOTTOM_8, BOTTOM_9;
 	
-	public static Col3PairType calculateCol3Type(int x, int y) {
-		if (y >= 0 && y<3) {
-			switch(x) {
+	public static Row3PairType calculateRow3Type(int x, int y) {
+		if (x >= 0 && x<3) {
+			switch(y) {
 			case 0:
 				return TOP_1;
 			case 1:
@@ -29,8 +29,8 @@ public enum Col3PairType {
 			default: throw new RuntimeException("Invalid size of array");
 		}
 		}
-		else if (y >= 3 && y<6) {
-			switch(x) {
+		else if (x >= 3 && x<6) {
+			switch(y) {
 			case 0:
 				return MIDDLE_1;
 			case 1:
@@ -53,7 +53,7 @@ public enum Col3PairType {
 		}
 		}
 		else {
-			switch(x) {
+			switch(y) {
 			case 0:
 				return BOTTOM_1;
 			case 1:

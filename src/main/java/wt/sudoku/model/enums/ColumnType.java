@@ -1,4 +1,4 @@
-package model.enums;
+package wt.sudoku.model.enums;
 
 public enum ColumnType {
 	ColumnA, ColumnB, ColumnC, ColumnD, ColumnE, ColumnF, ColumnG, ColumnH, ColumnI;

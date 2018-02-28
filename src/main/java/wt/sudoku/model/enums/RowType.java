@@ -1,4 +1,4 @@
-package model.enums;
+package wt.sudoku.model.enums;
 
 public enum RowType {
 	ROW1, ROW2, ROW3, ROW4, ROW5, ROW6, ROW7, ROW8, ROW9;

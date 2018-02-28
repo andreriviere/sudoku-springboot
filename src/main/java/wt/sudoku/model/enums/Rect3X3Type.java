@@ -1,4 +1,4 @@
-package model.enums;
+package wt.sudoku.model.enums;
 
 public enum Rect3X3Type {
 	TOP_LEFT, TOP_MIDDLE, TOP_RIGHT,

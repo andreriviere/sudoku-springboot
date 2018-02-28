@@ -1,6 +1,6 @@
-package model.elements.related;
+package wt.sudoku.model.elements.related;
 
-import model.enums.Row3PairType;
+import wt.sudoku.model.enums.Row3PairType;
 
 public class OptionalRelationRow {
 	

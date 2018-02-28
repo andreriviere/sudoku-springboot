@@ -1,12 +1,12 @@
-package model.elements.related;
+package wt.sudoku.model.elements.related;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.enums.Col3PairType;
-import model.enums.Row3PairType;
+import wt.sudoku.model.enums.Col3PairType;
+import wt.sudoku.model.enums.Row3PairType;
 
 public class Row3Pairs {
 

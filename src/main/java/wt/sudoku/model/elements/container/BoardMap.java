@@ -1,10 +1,10 @@
-package model.elements.container;
+package wt.sudoku.model.elements.container;
 
-import model.elements.Columns;
-import model.elements.Rect3X3s;
-import model.elements.Rows;
-import model.elements.related.Col3Pairs;
-import model.elements.related.Row3Pairs;
+import wt.sudoku.model.elements.Columns;
+import wt.sudoku.model.elements.Rect3X3s;
+import wt.sudoku.model.elements.Rows;
+import wt.sudoku.model.elements.related.Col3Pairs;
+import wt.sudoku.model.elements.related.Row3Pairs;
 
 public class BoardMap {
 

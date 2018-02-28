@@ -1,11 +1,11 @@
-package model.elements;
+package wt.sudoku.model.elements;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.enums.Rect3X3Type;
+import wt.sudoku.model.enums.Rect3X3Type;
 
 public class Rect3X3s {
 

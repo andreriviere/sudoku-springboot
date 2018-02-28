@@ -1,10 +1,10 @@
-package model.elements.container;
+package wt.sudoku.model.elements.container;
 
-import model.enums.Col3PairType;
-import model.enums.ColumnType;
-import model.enums.Rect3X3Type;
-import model.enums.Row3PairType;
-import model.enums.RowType;
+import wt.sudoku.model.enums.Col3PairType;
+import wt.sudoku.model.enums.ColumnType;
+import wt.sudoku.model.enums.Rect3X3Type;
+import wt.sudoku.model.enums.Row3PairType;
+import wt.sudoku.model.enums.RowType;
 
 public class CellParams {
 

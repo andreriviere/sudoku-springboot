@@ -4,9 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import model.enums.ColumnType;
-import model.enums.Rect3X3Type;
-import model.enums.RowType;
+import wt.sudoku.model.Board;
+import wt.sudoku.model.enums.ColumnType;
+import wt.sudoku.model.enums.Rect3X3Type;
+import wt.sudoku.model.enums.RowType;
 
 public class BoardTest {
 

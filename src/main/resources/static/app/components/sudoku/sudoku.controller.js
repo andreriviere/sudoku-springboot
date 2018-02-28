@@ -4,7 +4,7 @@ webApp.controller('sudokuController', sudokuController);
 
 sudokuController.$inject = ['$scope','sudokuService'];
 
-function sudokuController($scope, sudokuController) {
+function sudokuController($scope, sudokuService) {
 
 	var canvasId = 'sudokuBoard';
 	var canvasContext = '2d';
@@ -20,7 +20,7 @@ function sudokuController($scope, sudokuController) {
 	}, function(optional) { 
 		console.log(optional);
 	});
-	}
+	
 	
 	function paintGameOfLifeBoard(board, context) {
 //		for(var x=0; x<board.length; x++) {
