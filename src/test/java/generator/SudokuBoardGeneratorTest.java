@@ -10,7 +10,7 @@ import wt.sudoku.utils.SudokuBoardTextPrinter;
 
 public class SudokuBoardGeneratorTest {
 
-	@Test
+//	@Test
 	public void generateRandomSudokuBoardTest() {
 		SudokuBoardGenerator sudokuBoardGenerator = new GroupFillingSudokuGenerator();
 		BoardPlay board = null;
