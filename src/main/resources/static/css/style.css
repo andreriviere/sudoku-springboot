@@ -1,0 +1,35 @@
+.sudokuBoard {
+	width: 800px;
+	font-family:verdana,helvetica,arial,sans-serif;
+}
+
+.sudokuRow {
+	float:left; 
+	clear: left;
+}
+
+.sudokuCell {
+	width: 45px;
+	height: 45px;
+	background-color: white;
+	border-style: solid;
+    border-color: black;
+	float:left; display:inline;
+	text-align: center;
+	box-shadow: 0px 0px 0px 1px #bdc3c7;
+	vertical-align: middle;
+	padding: 10px;
+}
+
+.sudokuCellFilled {
+	width: 45px;
+	height: 45px;
+	background-color: silver;
+	border-style: solid;
+    border-color: black;
+	float:left; display:inline;
+	text-align: center;
+	box-shadow: 0px 0px 0px 1px #bdc3c7;
+	vertical-align: middle;
+	padding: 10px;
+}

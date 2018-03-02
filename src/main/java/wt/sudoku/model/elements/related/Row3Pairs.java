@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import wt.sudoku.model.enums.Col3PairType;
 import wt.sudoku.model.enums.Row3PairType;
 
 public class Row3Pairs {

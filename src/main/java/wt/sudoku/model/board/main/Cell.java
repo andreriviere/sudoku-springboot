@@ -1,5 +1,4 @@
-package wt.sudoku.model;
-
+package wt.sudoku.model.board.main;
 
 import java.util.List;
 
@@ -23,16 +22,14 @@ public class Cell implements Cloneable {
 		addValueToAllCellTypeContainers(value);
 		this.value = value;
 	}
-	
-	public void deleteValue(int value) {
+
+	public void deleteValue() {
 		removeValueFromAllCellTypeContainers(value);
 		this.value = 0;
 	}
 
 	public boolean isValueAcceptable(int value) {
-		return value != 0 && !boardMap.getRects().getRects().get(cellParams.getRectType()).contains(value)
-				&& !boardMap.getColumns().getColumns().get(cellParams.getColumnType()).contains(value)
-				&& !boardMap.getRows().getRows().get(cellParams.getRowType()).contains(value);
+		return value != 0 && !isValueExistInRect3X3(value) && !isValueExistInColumn(value) && !isValueExistInRow(value);
 	}
 
 	public int getValue() {
@@ -63,18 +60,31 @@ public class Cell implements Cloneable {
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
-	
+
 	private void addValueToAllCellTypeContainers(int value) {
 		boardMap.getRects().addValueToType(cellParams.getRectType(), value);
 		boardMap.getRows().addValueToType(cellParams.getRowType(), value);
 		boardMap.getColumns().addValueToType(cellParams.getColumnType(), value);
 	}
-	
+
 	private void removeValueFromAllCellTypeContainers(int value) {
 		boardMap.getRects().removeElementFromType(cellParams.getRectType(), value);
 		boardMap.getRows().removeElementFromType(cellParams.getRowType(), value);
 		boardMap.getColumns().removeElementFromType(cellParams.getColumnType(), value);
 	}
 
+	private boolean isValueExistInRow(int value) {
+		return boardMap.getRows().getRows().get(cellParams.getRowType()).contains(value);
+	}
+
+	private boolean isValueExistInColumn(int value) {
+		return boardMap.getColumns().getColumns().get(cellParams.getColumnType()).contains(value);
+	}
+
+	private boolean isValueExistInRect3X3(int value) {
+		return boardMap.getRects().getRects().get(cellParams.getRectType()).contains(value);
+	}
+	
+	
 
 }

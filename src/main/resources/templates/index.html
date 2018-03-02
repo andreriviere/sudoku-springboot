@@ -4,13 +4,116 @@
 <head>
 <link th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}"
 	rel="stylesheet" />
+	<link th:href="@{/css/style.css}"
+	rel="stylesheet" />
 
 <meta charset="UTF-8">
 <title>Sudoku</title>
 </head>
 <body data-ng-controller='sudokuController'>
 	
-		<canvas id="sudokuBoard"></canvas>
+		<div class="sudokuBoard">
+			<div class="sudokuRow">
+				<div class="sudokuCell" x="1" y="1"></div>
+				<div class="sudokuCell" x="1" y="2"></div>
+				<div class="sudokuCell" x="1" y="3"></div>
+				<div class="sudokuCell" x="1" y="4"></div>
+				<div class="sudokuCell" x="1" y="5"></div>
+				<div class="sudokuCell" x="1" y="6"></div>
+				<div class="sudokuCell" x="1" y="7"></div>
+				<div class="sudokuCell" x="1" y="8"></div>
+				<div class="sudokuCell" x="1" y="9"></div>
+			</div>
+			<div class="sudokuRow">
+				<div class="sudokuCell" x="2" y="1"></div>
+				<div class="sudokuCell" x="2" y="2"></div>
+				<div class="sudokuCell" x="2" y="3"></div>
+				<div class="sudokuCell" x="2" y="4"></div>
+				<div class="sudokuCell" x="2" y="5"></div>
+				<div class="sudokuCell" x="2" y="6"></div>
+				<div class="sudokuCell" x="2" y="7"></div>
+				<div class="sudokuCell" x="2" y="8"></div>
+				<div class="sudokuCell" x="2" y="9"></div>
+			</div>
+			<div class="sudokuRow">
+				<div class="sudokuCell" x="3" y="1"></div>
+				<div class="sudokuCell" x="3" y="2"></div>
+				<div class="sudokuCell" x="3" y="3"></div>
+				<div class="sudokuCell" x="3" y="4"></div>
+				<div class="sudokuCell" x="3" y="5"></div>
+				<div class="sudokuCell" x="3" y="6"></div>
+				<div class="sudokuCell" x="3" y="7"></div>
+				<div class="sudokuCell" x="3" y="8"></div>
+				<div class="sudokuCell" x="3" y="9"></div>
+			</div>
+			<div class="sudokuRow">
+				<div class="sudokuCell" x="4" y="1"></div>
+				<div class="sudokuCell" x="4" y="2"></div>
+				<div class="sudokuCell" x="4" y="3"></div>
+				<div class="sudokuCell" x="4" y="4"></div>
+				<div class="sudokuCell" x="4" y="5"></div>
+				<div class="sudokuCell" x="4" y="6"></div>
+				<div class="sudokuCell" x="4" y="7"></div>
+				<div class="sudokuCell" x="4" y="8"></div>
+				<div class="sudokuCell" x="4" y="9"></div>
+			</div>
+			<div class="sudokuRow">
+				<div class="sudokuCell" x="5" y="1"></div>
+				<div class="sudokuCell" x="5" y="2"></div>
+				<div class="sudokuCell" x="5" y="3"></div>
+				<div class="sudokuCell" x="5" y="4"></div>
+				<div class="sudokuCell" x="5" y="5"></div>
+				<div class="sudokuCell" x="5" y="6"></div>
+				<div class="sudokuCell" x="5" y="7"></div>
+				<div class="sudokuCell" x="5" y="8"></div>
+				<div class="sudokuCell" x="5" y="9"></div>
+			</div>
+			<div class="sudokuRow">
+				<div class="sudokuCell" x="6" y="1"></div>
+				<div class="sudokuCell" x="6" y="2"></div>
+				<div class="sudokuCell" x="6" y="3"></div>
+				<div class="sudokuCell" x="6" y="4"></div>
+				<div class="sudokuCell" x="6" y="5"></div>
+				<div class="sudokuCell" x="6" y="6"></div>
+				<div class="sudokuCell" x="6" y="7"></div>
+				<div class="sudokuCell" x="6" y="8"></div>
+				<div class="sudokuCell" x="6" y="9"></div>
+			</div>
+			<div class="sudokuRow">
+				<div class="sudokuCell" x="7" y="1"></div>
+				<div class="sudokuCell" x="7" y="2"></div>
+				<div class="sudokuCell" x="7" y="3"></div>
+				<div class="sudokuCell" x="7" y="4"></div>
+				<div class="sudokuCell" x="7" y="5"></div>
+				<div class="sudokuCell" x="7" y="6"></div>
+				<div class="sudokuCell" x="7" y="7"></div>
+				<div class="sudokuCell" x="7" y="8"></div>
+				<div class="sudokuCell" x="7" y="9"></div>
+			</div>
+			<div class="sudokuRow">
+				<div class="sudokuCell" x="8" y="1"></div>
+				<div class="sudokuCell" x="8" y="2"></div>
+				<div class="sudokuCell" x="8" y="3"></div>
+				<div class="sudokuCell" x="8" y="4"></div>
+				<div class="sudokuCell" x="8" y="5"></div>
+				<div class="sudokuCell" x="8" y="6"></div>
+				<div class="sudokuCell" x="8" y="7"></div>
+				<div class="sudokuCell" x="8" y="8"></div>
+				<div class="sudokuCell" x="8" y="9"></div>
+			</div>
+			<div class="sudokuRow">
+				<div class="sudokuCell" x="9" y="1"></div>
+				<div class="sudokuCell" x="9" y="2"></div>
+				<div class="sudokuCell" x="9" y="3"></div>
+				<div class="sudokuCell" x="9" y="4"></div>
+				<div class="sudokuCell" x="9" y="5"></div>
+				<div class="sudokuCell" x="9" y="6"></div>
+				<div class="sudokuCell" x="9" y="7"></div>
+				<div class="sudokuCell" x="9" y="8"></div>
+				<div class="sudokuCell" x="9" y="9"></div>
+			</div>
+		
+		</div>
 
 </body>
 <script th:src="@{/webjars/jquery/2.1.1/jquery.js}"></script>

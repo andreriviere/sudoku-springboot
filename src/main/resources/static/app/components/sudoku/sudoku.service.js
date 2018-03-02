@@ -7,19 +7,19 @@ sudokuService.$inject = [ '$http' ];
 function sudokuService($http) {
 	var ctrl = this;
 	
-	ctrl.postRequestForRandomSudokuBoard = function() {
+	ctrl.postRequestForRandomSudokuBoard = function(level) {
 		return $http({
 			url : 'api/randomBoard',
 			method : "POST",
-			data : null
+			data : level
 		});
 	}
 	
-	ctrl.postRequestForUpdateSudokuBoard = function(boardCommand) {
+	ctrl.postRequestForGenerateNextSolution = function(board) {
 		return $http({
-			url : 'api/updateBoard',
+			url : 'api/generateNextSolution',
 			method : "POST",
-			data : boardCommand
+			data : board
 		});
 	}
 };

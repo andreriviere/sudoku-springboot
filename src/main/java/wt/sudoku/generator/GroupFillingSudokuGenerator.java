@@ -6,11 +6,13 @@ import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
-import wt.sudoku.model.Board;
 import wt.sudoku.model.BoardPlay;
-import wt.sudoku.model.Cell;
+import wt.sudoku.model.BoardValidationWithBackupStrategy;
+import wt.sudoku.model.InitializationBoardWithZerosStrategy;
+import wt.sudoku.model.board.main.Board;
+import wt.sudoku.model.board.main.Cell;
 
-@Service(value = "lowLevelSudokuGenerator")
+@Service(value = "groupFillingSudokuGenerator")
 public class GroupFillingSudokuGenerator implements SudokuBoardGenerator {
 
 	private Random randomGenerator;
@@ -21,7 +23,7 @@ public class GroupFillingSudokuGenerator implements SudokuBoardGenerator {
 
 	@Override
 	public BoardPlay generateSolvableBoard(SudokuLevel sudokuLevel) {
-		Board board = new Board();
+		Board board = new Board(new InitializationBoardWithZerosStrategy(), new BoardValidationWithBackupStrategy());
 		Cell[][] sudokuCells = board.getSudokuCells();
 		List<Integer> row1List = new ArrayList<Integer>();
 		List<Integer> row2List = new ArrayList<Integer>();
@@ -32,10 +34,7 @@ public class GroupFillingSudokuGenerator implements SudokuBoardGenerator {
 			generateSecond3Col(board, sudokuCells, row1List, row2List, row3List);
 			cleanTempRowList(row1List, row2List, row3List);
 			generateThird3Col(board, sudokuCells, row1List, row2List, row3List);
-			for (int i = 0; i < sudokuLevel.getEmptyCount(); i++) {
-				deleteRandomCell(board);
-			}
-
+			sudokuLevel.adjustBoardToSudokuLevel(board);
 			return board;
 		} catch (Exception e) {
 			return generateSolvableBoard(sudokuLevel);
@@ -43,15 +42,6 @@ public class GroupFillingSudokuGenerator implements SudokuBoardGenerator {
 
 	}
 
-	private void deleteRandomCell(BoardPlay board) {
-		int randomX = randomGenerator.nextInt(9);
-		int randomY = randomGenerator.nextInt(9);
-		Cell cell = board.getSudokuCells()[randomX][randomY];
-		if (cell.getValue() != 0)
-			board.getSudokuCells()[randomX][randomY].deleteValue(cell.getValue());
-		else
-			deleteRandomCell(board);
-	}
 
 	private void cleanTempRowList(List<Integer> row1List, List<Integer> row2List, List<Integer> row3List) {
 		row1List.clear();
@@ -190,25 +180,23 @@ public class GroupFillingSudokuGenerator implements SudokuBoardGenerator {
 		int value = board.getSudokuCells()[x][y].getAvailableValues()
 				.get(randomGenerator.nextInt(board.getSudokuCells()[x][y].getAvailableValues().size()));
 		board.addValueToCell(x, y, value);
-		if (!board.calculateIfAfterAddedNewValueCurrentBoardIsValid()) {
-			board.deleteValue(x, y, value);
+		if (!board.isValueValidToAdd(x, y, value)) {
+			board.deleteValue(x, y);
 			board.fillListWithValidValuesPerEachCell();
 			return 0;
 		}
 
-		board.addCellToCellHistory(x, y, value);
 		board.fillListWithValidValuesPerEachCell();
 		return value;
 	}
 
 	private int addCellValue(Board board, int x, int y, int value) {
 		board.addValueToCell(x, y, value);
-		if (!board.calculateIfAfterAddedNewValueCurrentBoardIsValid()) {
-			board.deleteValue(x, y, value);
+		if (!board.isValueValidToAdd(x, y, value)) {
+			board.deleteValue(x, y);
 			board.fillListWithValidValuesPerEachCell();
 			return 0;
 		}
-		board.addCellToCellHistory(x, y, value);
 		board.fillListWithValidValuesPerEachCell();
 		return value;
 	}

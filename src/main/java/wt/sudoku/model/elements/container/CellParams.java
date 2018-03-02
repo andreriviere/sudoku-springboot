@@ -8,18 +8,22 @@ import wt.sudoku.model.enums.RowType;
 
 public class CellParams {
 
+	private int x;
+	private int y;
 	private Rect3X3Type rectType;
 	private ColumnType columnType;
 	private RowType rowType;
 	private Col3PairType col3PairType;
 	private Row3PairType row3PairType;
-	
-	public CellParams(Rect3X3Type rectType, ColumnType columnType, RowType rowType, Col3PairType col3PairType, Row3PairType row3PairType) {
+
+	public CellParams(int x, int y, Rect3X3Type rectType, ColumnType columnType, RowType rowType, Col3PairType col3PairType, Row3PairType row3PairType) {
 		this.rectType = rectType;
 		this.columnType = columnType;
 		this.rowType = rowType;
 		this.col3PairType = col3PairType;
 		this.row3PairType = row3PairType;
+		this.x = x;
+		this.y = y;
 	}
 
 	public Rect3X3Type getRectType() {
@@ -40,6 +44,14 @@ public class CellParams {
 
 	public Row3PairType getRow3PairType() {
 		return row3PairType;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
 	}
 	
 }

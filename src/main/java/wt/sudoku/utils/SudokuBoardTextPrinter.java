@@ -1,6 +1,6 @@
 package wt.sudoku.utils;
 
-import wt.sudoku.model.Cell;
+import wt.sudoku.model.board.main.Cell;
 
 public class SudokuBoardTextPrinter {
 
