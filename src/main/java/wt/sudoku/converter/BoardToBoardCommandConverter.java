@@ -20,7 +20,7 @@ public class BoardToBoardCommandConverter implements Converter<BoardPlay, BoardC
 		for (int x = 0; x < cells.length; x++) {
 			boardCells[x] = new int[cells[x].length];
 			for (int y = 0; y < cells[x].length; y++) {
-				boardCells[x][y] = cells[x][y].getValue();
+				boardCells[x][y] = cells[y][x].getValue();
 			}
 		}
 

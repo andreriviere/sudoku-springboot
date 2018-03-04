@@ -28,6 +28,7 @@ import wt.sudoku.generator.SudokuBoardGenerator;
 import wt.sudoku.generator.SudokuLevel;
 import wt.sudoku.model.BoardPlay;
 import wt.sudoku.model.board.main.Cell;
+import wt.sudoku.utils.SudokuBoardTextPrinter;
 
 @Controller
 public class SudokuController {
@@ -36,11 +37,10 @@ public class SudokuController {
 	private BoardCommandToBoardPlayConverter boardCommandToBoardPlayConverter;
 	private BoardToBoardCommandConverter boardToBoardCommandConverter;
 	private CellToCellCommandConverter cellToCellCommandConverter;
-	
-	
+
 	@Autowired
-	public SudokuController(@Qualifier("getSudokuBoardGenerator") SudokuBoardGenerator sudokuBoardGenerator, 
-			BoardToBoardCommandConverter boardToBoardCommandConverter, 
+	public SudokuController(@Qualifier("getSudokuBoardGenerator") SudokuBoardGenerator sudokuBoardGenerator,
+			BoardToBoardCommandConverter boardToBoardCommandConverter,
 			BoardCommandToBoardPlayConverter boardCommandToBoardPlayConverter,
 			CellToCellCommandConverter cellToCellCommandConverter) {
 		this.sudokuBoardGenerator = sudokuBoardGenerator;
@@ -53,43 +53,53 @@ public class SudokuController {
 	public String getIndexPage(Model model) {
 		return "index";
 	}
-	
-	@RequestMapping(value = "api/randomBoard", method=RequestMethod.POST)
+
+	@RequestMapping(value = "api/randomBoard", method = RequestMethod.POST)
 	@ResponseBody
 	public BoardCommand generateRandomBoard(@RequestBody String level) {
+			
 		Optional<SudokuLevel> sudokuLevel = Optional.of(SudokuLevel.valueOf(level.toUpperCase()));
 		if (sudokuLevel.isPresent()) {
 			BoardPlay boardPlay = sudokuBoardGenerator.generateSolvableBoard(sudokuLevel.get());
+			SudokuBoardTextPrinter.printSudokuBoard(boardPlay.getSudokuCells());
 			return boardToBoardCommandConverter.convert(boardPlay);
+		} else {
+			throw new InvalidParameterException(
+					"Level parameter should have one of possible results [easy, medium, hard]");
 		}
-		else {
-			throw new InvalidParameterException("Level parameter should have one of possible results [easy, medium, hard]");
-		}
-		
+
 	}
-	
-	@RequestMapping(value = "api/generateNextSolution", method=RequestMethod.POST)
+
+	@RequestMapping(value = "api/generateNextSolution", method = RequestMethod.POST)
 	@ResponseBody
 	public CellCommand findNextMoveSolution(@RequestBody BoardCommand boardCommand) {
 		BoardPlay boardPlay = boardCommandToBoardPlayConverter.convert(boardCommand);
+		SudokuBoardTextPrinter.printSudokuBoard(boardPlay.getSudokuCells());
 		int repeatTime = 10;
 		while (repeatTime > 0) {
-			Cloner cloner = new Cloner();
-			BoardPlay clonedBoard = cloner.deepClone(boardPlay);
-			Cell solution = clonedBoard.findNextSolution();
-			if (clonedBoard.isBoardSolvable()) return cellToCellCommandConverter.convert(solution);
-			repeatTime--;
+			try {
+				System.out.println("repeat"+repeatTime);
+				Cloner cloner = new Cloner();
+				BoardPlay clonedBoard = cloner.deepClone(boardPlay);
+				Cell solution = clonedBoard.findNextSolution();
+				if (clonedBoard.isBoardSolvable())	
+					return cellToCellCommandConverter.convert(solution);
+				repeatTime -= 1;
+			} catch (RuntimeException r) {
+				r.printStackTrace();
+				repeatTime -= 1;
+			}
 		}
 		throw new RuntimeException("Board can't be solved");
 	}
-	
-	@RequestMapping(value = "api/checkIsBoardSolvable", method=RequestMethod.POST)
+
+	@RequestMapping(value = "api/checkIsBoardSolvable", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean checkIsBoardSolvable(@RequestBody BoardCommand boardCommand) {
 		BoardPlay boardPlay = boardCommandToBoardPlayConverter.convert(boardCommand);
 		return boardPlay.isBoardSolvable();
 	}
-	
+
 	@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<MessageCommand> handleEmptyNecessarilyFieldException(RuntimeException ree) {
@@ -97,7 +107,7 @@ public class SudokuController {
 		message.setMessage(ree.getMessage());
 		return new ResponseEntity<MessageCommand>(message, HttpStatus.NOT_ACCEPTABLE);
 	}
-	
+
 	@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
 	@ExceptionHandler(InvalidParameterException.class)
 	public ResponseEntity<MessageCommand> handleInvalidParameterExceptionException(InvalidParameterException ipe) {
@@ -105,6 +115,5 @@ public class SudokuController {
 		message.setMessage(ipe.getMessage());
 		return new ResponseEntity<MessageCommand>(message, HttpStatus.NOT_ACCEPTABLE);
 	}
-	
-	
+
 }

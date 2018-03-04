@@ -34,7 +34,7 @@ public class BoardValidationWithBackupStrategy implements BoardValidationStrateg
 
 		return true;
 	}
-
+	
 	@Override
 	public boolean isValueAcceptable(Board board, int x, int y, int value) {
 		this.board = board;

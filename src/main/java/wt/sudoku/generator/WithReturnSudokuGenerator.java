@@ -10,13 +10,13 @@ import wt.sudoku.model.InitializationBoardWithZerosStrategy;
 import wt.sudoku.model.board.main.Board;
 import wt.sudoku.solver.SudokuSolverAlgorithm;
 
-@Service(value = "bruteForceSudokuGenerator")
-public class BruteForceSudokuGenerator implements SudokuBoardGenerator{
+@Service(value = "withReturnSudokuGenerator")
+public class WithReturnSudokuGenerator implements SudokuBoardGenerator{
 
 	private SudokuSolverAlgorithm sudokuSolverAlgorithm;
 	
 	@Autowired
-	public BruteForceSudokuGenerator(@Qualifier("sudokuSolverUsingBruteForceAlgorithm") SudokuSolverAlgorithm sudokuSolverAlgorithm) {
+	public WithReturnSudokuGenerator(@Qualifier("sudokuSolverUsingReturnAlgorithm") SudokuSolverAlgorithm sudokuSolverAlgorithm) {
 		this.sudokuSolverAlgorithm = sudokuSolverAlgorithm;
 	}
 

@@ -1,21 +1,15 @@
 package wt.sudoku.model.board.main;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.rits.cloning.Cloner;
-
 import wt.sudoku.model.BoardPlay;
 import wt.sudoku.model.BoardValidationStrategy;
 import wt.sudoku.model.InitializationBoardStrategy;
 import wt.sudoku.model.elements.container.BoardMap;
-import wt.sudoku.solver.BruteForceSudokuSolverAlgorithm;
+import wt.sudoku.solver.SudokuSolverAlgorithm;
 import wt.sudoku.utils.BoardStatisticsHelper;
 
 public class Board implements BoardPlay {
@@ -29,11 +23,13 @@ public class Board implements BoardPlay {
 	private List<Cell> addValueHistory;
 
 	private BoardValidationStrategy boardValidationStrategy;
+	private SudokuSolverAlgorithm sudokuSolverAlgorithm;
 
 	public Board(InitializationBoardStrategy initializationBoardStrategy,
-			BoardValidationStrategy boardValidationStrategy) {
+			BoardValidationStrategy boardValidationStrategy, SudokuSolverAlgorithm sudokuSolverAlgorithm) {
 		this.boardValidationStrategy = boardValidationStrategy;
 		this.sudokuCells = new Cell[BOARD_X_SIZE][BOARD_Y_SIZE];
+		this.sudokuSolverAlgorithm = sudokuSolverAlgorithm;
 		addValueHistory = new ArrayList<Cell>();
 		boardMap = new BoardMap();
 		initializationBoardStrategy.initializeBoard(this);
@@ -71,25 +67,13 @@ public class Board implements BoardPlay {
 	
 	@Override
 	public Cell findNextSolution() {
-		fillListWithValidValuesPerEachCell();
-		if (!isBoardSolvable()) throw new RuntimeException("Unsolvable sudoku board");
-		List<Cell> cellToList = Arrays.stream(sudokuCells).flatMap(Arrays::stream)
-				.filter(c -> c.getValue() == 0)
-				.sorted((c1, c2) -> Integer.compare(c1.getAvailableValues().size(), c2.getAvailableValues().size()))
-				.collect(Collectors.toList());
-		if (cellToList.isEmpty()) return null;
-		Random random = new Random();
-		cellToList.get(0).addValue(cellToList.get(0).getAvailableValues().get(random.nextInt(cellToList.get(0).getAvailableValues().size())));
-		return cellToList.get(0);
+		return sudokuSolverAlgorithm.findNextSolution(this);
 	}
 	
 	@Override
 	public boolean isBoardSolvable() {
-		Cloner cloner = new Cloner();
-		Board clonedBoard = cloner.deepClone(this);
-		BruteForceSudokuSolverAlgorithm bruteForceSudokuSolverAlgorithm = new BruteForceSudokuSolverAlgorithm();
-		clonedBoard = bruteForceSudokuSolverAlgorithm.solveSudokuBoard(clonedBoard, 100);
-		System.out.println(BoardStatisticsHelper.calculateFilledFields(clonedBoard));
+		Board clonedBoard = cloneBoard();
+		clonedBoard = sudokuSolverAlgorithm.solveSudokuBoard(clonedBoard, 100);
 		return BoardStatisticsHelper.calculateFilledFields(clonedBoard) == 81;
 	}
 
@@ -101,6 +85,11 @@ public class Board implements BoardPlay {
 	@Override
 	public Cell[][] getSudokuCells() {
 		return sudokuCells;
+	}
+	
+	public Board cloneBoard() {
+		Cloner cloner = new Cloner();
+		return cloner.deepClone(this);
 	}
 
 	public List<Cell> getAddValueHistory() {

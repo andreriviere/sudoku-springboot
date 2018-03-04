@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import wt.sudoku.model.board.main.Board;
-import wt.sudoku.solver.BruteForceSudokuSolverAlgorithm;
+import wt.sudoku.solver.SudokuSolverUsingBruteForceAlgorithm;
 import wt.sudoku.utils.SudokuBoardHelper;
 import wt.sudoku.utils.SudokuBoardTextPrinter;
 
@@ -27,7 +27,7 @@ public class BoardTest {
 				{0,7,4, 0,0,2, 0,5,0},
 				{9,0,2, 0,3,0, 6,7,1},
 			};
-		Board board = SudokuBoardHelper.getBoard(solvableBoard);
+		Board board = SudokuBoardHelper.getBoard(solvableBoard, new SudokuSolverUsingBruteForceAlgorithm());
 		board.addValueToCell(0, 7, 3);
 		assertTrue(board.getSudokuCells()[0][7].getValue() == 3);
 	}
@@ -48,7 +48,7 @@ public class BoardTest {
 				{0,7,4, 0,0,2, 0,5,0},
 				{9,0,2, 0,3,0, 6,7,1},
 			};
-		Board board = SudokuBoardHelper.getBoard(solvableBoard);
+		Board board = SudokuBoardHelper.getBoard(solvableBoard, new SudokuSolverUsingBruteForceAlgorithm());
 		board.addValueToCell(0, 7, 4);
 		assertTrue(board.getSudokuCells()[0][7].getValue() == 4);
 	}
@@ -68,7 +68,7 @@ public class BoardTest {
 				{0,7,4, 0,0,2, 0,5,0},
 				{9,0,2, 0,3,0, 6,7,1},
 			};
-		Board board = SudokuBoardHelper.getBoard(solvableBoard);
+		Board board = SudokuBoardHelper.getBoard(solvableBoard, new SudokuSolverUsingBruteForceAlgorithm());
 		board.deleteValue(0, 8);
 		assertTrue(board.getSudokuCells()[0][8].getValue() == 0);
 	}
@@ -106,7 +106,7 @@ public class BoardTest {
 						{0,7,4, 0,0,2, 0,5,0},
 						{9,0,2, 0,3,0, 6,7,1},
 					};
-				Board board = SudokuBoardHelper.getBoard(solvableBoard);
+				Board board = SudokuBoardHelper.getBoard(solvableBoard, new SudokuSolverUsingBruteForceAlgorithm());
 				if (board.getSudokuCells()[x][y].getValue() == 0) {
 					if (!board.isValueValidToAdd(x, y, solvedBoard[x][y])) {
 						System.out.println("x:"+x+" y:"+y+" value:"+solvedBoard[x][y]);
@@ -151,7 +151,7 @@ public class BoardTest {
 						{0,7,4, 0,0,2, 0,5,0},
 						{9,0,2, 0,3,0, 6,7,1},
 					};
-				Board board = SudokuBoardHelper.getBoard(solvableBoard);
+				Board board = SudokuBoardHelper.getBoard(solvableBoard, new SudokuSolverUsingBruteForceAlgorithm());
 				if (board.getSudokuCells()[x][y].getValue() == 0) {
 					if (!board.isValueValidToAdd(x, y, solvedBoard[x][y])) isOk = false;
 				}
@@ -175,8 +175,8 @@ public class BoardTest {
 				{0,7,4, 0,0,2, 0,5,0},
 				{9,0,2, 0,3,0, 6,7,1},
 			};
-		Board board = SudokuBoardHelper.getBoard(solvableBoard);
-		BruteForceSudokuSolverAlgorithm bruteForceSudokuSolverAlgorithm = new BruteForceSudokuSolverAlgorithm();
+		Board board = SudokuBoardHelper.getBoard(solvableBoard, new SudokuSolverUsingBruteForceAlgorithm());
+		SudokuSolverUsingBruteForceAlgorithm bruteForceSudokuSolverAlgorithm = new SudokuSolverUsingBruteForceAlgorithm();
 		Board solved = bruteForceSudokuSolverAlgorithm.solveSudokuBoard(board,5);
 		
 		int[][] solvedBoard = { 
@@ -207,8 +207,8 @@ public class BoardTest {
 	@Test
 	public void testIsBoardSolvableFrom0() throws Exception {
 
-		Board board = new Board(new InitializationBoardWithZerosStrategy(), new BoardValidationWithBackupStrategy());
-		BruteForceSudokuSolverAlgorithm bruteForceSudokuSolverAlgorithm = new BruteForceSudokuSolverAlgorithm();
+		Board board = new Board(new InitializationBoardWithZerosStrategy(), new BoardValidationWithBackupStrategy(), new SudokuSolverUsingBruteForceAlgorithm());
+		SudokuSolverUsingBruteForceAlgorithm bruteForceSudokuSolverAlgorithm = new SudokuSolverUsingBruteForceAlgorithm();
 		Board solved = bruteForceSudokuSolverAlgorithm.solveSudokuBoard(board,5);
 		SudokuBoardTextPrinter.printSudokuBoard(solved.getSudokuCells());
 		assertTrue(true);
@@ -229,7 +229,7 @@ public class BoardTest {
 				{0,7,4, 0,0,2, 0,5,0},
 				{9,0,2, 0,3,0, 6,7,1},
 			};
-		Board board = SudokuBoardHelper.getBoard(solvableBoard);
+		Board board = SudokuBoardHelper.getBoard(solvableBoard, new SudokuSolverUsingBruteForceAlgorithm());
 		System.out.println(board.findNextSolution());
 		assertTrue(true);
 	}
