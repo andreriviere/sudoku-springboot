@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ import wt.sudoku.utils.SudokuBoardTextPrinter;
 @Controller
 public class SudokuController {
 
+	private final String CROSS_ORIGIN = "*";
 	private SudokuBoardGenerator sudokuBoardGenerator;
 	private BoardCommandToBoardPlayConverter boardCommandToBoardPlayConverter;
 	private BoardToBoardCommandConverter boardToBoardCommandConverter;
@@ -55,6 +57,7 @@ public class SudokuController {
 	}
 
 	@RequestMapping(value = "api/randomBoard", method = RequestMethod.POST)
+	@CrossOrigin(origins = CROSS_ORIGIN)
 	@ResponseBody
 	public BoardCommand generateRandomBoard(@RequestBody String level) {
 			
@@ -71,14 +74,18 @@ public class SudokuController {
 	}
 
 	@RequestMapping(value = "api/generateNextSolution", method = RequestMethod.POST)
+	@CrossOrigin(origins = CROSS_ORIGIN)
 	@ResponseBody
 	public CellCommand findNextMoveSolution(@RequestBody BoardCommand boardCommand) {
 		BoardPlay boardPlay = boardCommandToBoardPlayConverter.convert(boardCommand);
 		SudokuBoardTextPrinter.printSudokuBoard(boardPlay.getSudokuCells());
+		return tryToSolve10Times(boardPlay);
+	}
+
+	private CellCommand tryToSolve10Times(BoardPlay boardPlay) {
 		int repeatTime = 10;
 		while (repeatTime > 0) {
 			try {
-				System.out.println("repeat"+repeatTime);
 				Cloner cloner = new Cloner();
 				BoardPlay clonedBoard = cloner.deepClone(boardPlay);
 				Cell solution = clonedBoard.findNextSolution();
@@ -94,6 +101,7 @@ public class SudokuController {
 	}
 
 	@RequestMapping(value = "api/checkIsBoardSolvable", method = RequestMethod.POST)
+	@CrossOrigin(origins = CROSS_ORIGIN)
 	@ResponseBody
 	public boolean checkIsBoardSolvable(@RequestBody BoardCommand boardCommand) {
 		BoardPlay boardPlay = boardCommandToBoardPlayConverter.convert(boardCommand);
