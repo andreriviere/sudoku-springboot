@@ -9,4 +9,4 @@ POST: url: "api/checkIsBoardSolvable"; body: int[][] sudokuBoardCells; response:
 
 # List of github project using the server:
 1. Angular 7 client : https://github.com/rissekwow/sudoku-client-angular7  <br/>
-URL: https://sudoku-generator-app.herokuapp.com/sudoku/
+URL: https://sudoku-angular7-client.herokuapp.com/
