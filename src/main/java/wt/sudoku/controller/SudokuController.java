@@ -93,7 +93,6 @@ public class SudokuController {
 					return cellToCellCommandConverter.convert(solution);
 				repeatTime -= 1;
 			} catch (RuntimeException r) {
-				r.printStackTrace();
 				repeatTime -= 1;
 			}
 		}

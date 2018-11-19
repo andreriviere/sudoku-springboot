@@ -2,9 +2,12 @@ package wt.sudoku.solver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -13,39 +16,48 @@ import com.rits.cloning.Cloner;
 
 import wt.sudoku.model.board.main.Board;
 import wt.sudoku.model.board.main.Cell;
+import wt.sudoku.model.elements.container.BoardMap;
+import wt.sudoku.model.enums.ColumnType;
+import wt.sudoku.model.enums.Rect3X3Type;
+import wt.sudoku.model.enums.RowType;
 import wt.sudoku.utils.BoardStatisticsHelper;
 import wt.sudoku.utils.SudokuBoardTextPrinter;
 
 @Service("sudokuSolverUsingReturnAlgorithm")
 @Scope("prototype")
-public class SudokuSolverUsingReturnAlgorithm implements SudokuSolverAlgorithm{
+public class SudokuSolverUsingReturnAlgorithm implements SudokuSolverAlgorithm {
 
-	class ClonedBoard{
+	class ClonedBoard {
 		private Board board;
 		private Cell cell;
 		private List<Integer> anotherPossibilities;
-		
+
 		public Board getBoard() {
 			return board;
 		}
+
 		public void setBoard(Board board) {
 			this.board = board;
 		}
+
 		public Cell getCell() {
 			return cell;
 		}
+
 		public void setCell(Cell cell) {
 			this.cell = cell;
 		}
+
 		public List<Integer> getAnotherPossibilities() {
 			return anotherPossibilities;
 		}
+
 		public void setAnotherPossibilities(List<Integer> anotherPossibilities) {
 			this.anotherPossibilities = anotherPossibilities;
 		}
-		
+
 	}
-	
+
 	private Random randomGenerator;
 
 	public SudokuSolverUsingReturnAlgorithm() {
@@ -53,49 +65,58 @@ public class SudokuSolverUsingReturnAlgorithm implements SudokuSolverAlgorithm{
 	}
 
 	public Board solveSudokuBoard(Board enterBoard, int returnLimit) {
-	
+
 		List<ClonedBoard> clonedBoardToReturn = new ArrayList<ClonedBoard>();
-		
+		if (!analyzeIfBoardMapIsValid(enterBoard.getBoardMap()))
+			throw new RuntimeException("Board is not valid to solve.");
+
 		while (BoardStatisticsHelper.calculateFilledFields(enterBoard) != 81) {
-			
+
 			enterBoard.fillListWithValidValuesPerEachCell();
 
-			Optional<Cell> cellWithoutPossibilitiesToSet = Arrays.stream(enterBoard.getSudokuCells()).flatMap(Arrays::stream)
-					.filter(c -> c.getValue() == 0 && c.getAvailableValues().size() == 0).findFirst();
+			Optional<Cell> cellWithoutPossibilitiesToSet = Arrays.stream(enterBoard.getSudokuCells())
+					.flatMap(Arrays::stream).filter(c -> c.getValue() == 0 && c.getAvailableValues().size() == 0)
+					.findFirst();
 			if (cellWithoutPossibilitiesToSet.isPresent()) {
-				if (clonedBoardToReturn.isEmpty()) throw new RuntimeException("Board is unsololvable or current algorithm isn't good enought to solve it");
-				ClonedBoard goBackBoard = clonedBoardToReturn.get(clonedBoardToReturn.size()-1);
+				if (clonedBoardToReturn.isEmpty())
+					throw new RuntimeException(
+							"Board is unsololvable or current algorithm isn't good enought to solve it");
+				ClonedBoard goBackBoard = clonedBoardToReturn.get(clonedBoardToReturn.size() - 1);
 				if (goBackBoard.getAnotherPossibilities().isEmpty()) {
-					clonedBoardToReturn.remove(clonedBoardToReturn.size()-1);
-					enterBoard.deleteValue(goBackBoard.getCell().getCellParams().getX(),goBackBoard.getCell().getCellParams().getY());
+					clonedBoardToReturn.remove(clonedBoardToReturn.size() - 1);
+					enterBoard.deleteValue(goBackBoard.getCell().getCellParams().getX(),
+							goBackBoard.getCell().getCellParams().getY());
 					continue;
 				}
-				
-				goBackBoard.getBoard().deleteValue(goBackBoard.getCell().getCellParams().getX(), goBackBoard.getCell().getCellParams().getY());
-				int nextValue = goBackBoard.getAnotherPossibilities().get(randomGenerator.nextInt(goBackBoard.getAnotherPossibilities().size()));
-				goBackBoard.getBoard().addValueToCell(goBackBoard.getCell().getCellParams().getX(), goBackBoard.getCell().getCellParams().getY(), 
-						nextValue);
+
+				goBackBoard.getBoard().deleteValue(goBackBoard.getCell().getCellParams().getX(),
+						goBackBoard.getCell().getCellParams().getY());
+				int nextValue = goBackBoard.getAnotherPossibilities()
+						.get(randomGenerator.nextInt(goBackBoard.getAnotherPossibilities().size()));
+				goBackBoard.getBoard().addValueToCell(goBackBoard.getCell().getCellParams().getX(),
+						goBackBoard.getCell().getCellParams().getY(), nextValue);
 				goBackBoard.getAnotherPossibilities().remove(Integer.valueOf(nextValue));
-				clonedBoardToReturn.remove(clonedBoardToReturn.size()-1);
+				clonedBoardToReturn.remove(clonedBoardToReturn.size() - 1);
 				clonedBoardToReturn.add(goBackBoard);
 				enterBoard = goBackBoard.getBoard();
 				continue;
 			}
-					
-			Optional<Cell> cellWithOnePossibilityToSet = Arrays.stream(enterBoard.getSudokuCells()).flatMap(Arrays::stream)
-					.filter(c -> c.getValue() == 0 && c.getAvailableValues().size() == 1).findFirst();
+
+			Optional<Cell> cellWithOnePossibilityToSet = Arrays.stream(enterBoard.getSudokuCells())
+					.flatMap(Arrays::stream).filter(c -> c.getValue() == 0 && c.getAvailableValues().size() == 1)
+					.findFirst();
 			if (cellWithOnePossibilityToSet.isPresent()) {
 				Cell cell = cellWithOnePossibilityToSet.get();
-				enterBoard.addValueToCell(cell.getCellParams().getX(), cell.getCellParams().getY(), cell.getAvailableValues().get(0));
+				enterBoard.addValueToCell(cell.getCellParams().getX(), cell.getCellParams().getY(),
+						cell.getAvailableValues().get(0));
 				continue;
 			}
 
-			
-			Optional<Cell> cellWithMoreThanOnePossibility = Arrays.stream(enterBoard.getSudokuCells()).flatMap(Arrays::stream)
-					.filter(c -> c.getValue() == 0 && c.getAvailableValues().size() > 1)
-					.sorted((c1, c2) -> Integer.compare(c1.getAvailableValues().size(),c2.getAvailableValues().size())).findFirst();
-			if (!cellWithMoreThanOnePossibility.isPresent()) 
-			{
+			Optional<Cell> cellWithMoreThanOnePossibility = Arrays.stream(enterBoard.getSudokuCells())
+					.flatMap(Arrays::stream).filter(c -> c.getValue() == 0 && c.getAvailableValues().size() > 1)
+					.sorted((c1, c2) -> Integer.compare(c1.getAvailableValues().size(), c2.getAvailableValues().size()))
+					.findFirst();
+			if (!cellWithMoreThanOnePossibility.isPresent()) {
 				throw new RuntimeException("That situation shouldn't appear. Bug!");
 			}
 			Cell cell = cellWithMoreThanOnePossibility.get();
@@ -120,10 +141,44 @@ public class SudokuSolverUsingReturnAlgorithm implements SudokuSolverAlgorithm{
 		enterBoard.fillListWithValidValuesPerEachCell();
 		Board solved = solveSudokuBoard(enterBoard.cloneBoard(), 0);
 		SudokuBoardTextPrinter.printSudokuBoard(solved.getSudokuCells());
-		Optional<Cell> cellWithPossibilitiesOrderAsc = Arrays.stream(enterBoard.getSudokuCells()).flatMap(Arrays::stream)
-				.filter(c -> c.getValue() == 0)
-				.sorted((c1, c2) -> Integer.compare(c1.getAvailableValues().size(),c2.getAvailableValues().size())).findFirst();
-		if (!cellWithPossibilitiesOrderAsc.isPresent()) return null;
-		return solved.getSudokuCells()[cellWithPossibilitiesOrderAsc.get().getCellParams().getX()][cellWithPossibilitiesOrderAsc.get().getCellParams().getY()];
+		Optional<Cell> cellWithPossibilitiesOrderAsc = Arrays.stream(enterBoard.getSudokuCells())
+				.flatMap(Arrays::stream).filter(c -> c.getValue() == 0)
+				.sorted((c1, c2) -> Integer.compare(c1.getAvailableValues().size(), c2.getAvailableValues().size()))
+				.findFirst();
+		if (!cellWithPossibilitiesOrderAsc.isPresent())
+			return null;
+		return solved.getSudokuCells()[cellWithPossibilitiesOrderAsc.get().getCellParams()
+				.getX()][cellWithPossibilitiesOrderAsc.get().getCellParams().getY()];
+	}
+
+	private boolean analyzeIfBoardMapIsValid(BoardMap boardMap) {
+
+		for (Entry<RowType, List<Integer>> entryRow : boardMap.getRows().getRows().entrySet()) {
+			if (hasDuplicate(entryRow.getValue()))
+				return false;
+		}
+
+		for (Entry<ColumnType, List<Integer>> entryColumn : boardMap.getColumns().getColumns().entrySet()) {
+			if (hasDuplicate(entryColumn.getValue()))
+				return false;
+
+		}
+
+		for (Entry<Rect3X3Type, List<Integer>> entryRect3X3 : boardMap.getRects().getRects().entrySet()) {
+			if (hasDuplicate(entryRect3X3.getValue()))
+				return false;
+		}
+
+		return true;
+	}
+
+	private boolean hasDuplicate(List<Integer> values) {
+		Set<Integer> appeared = new HashSet<>();
+		for (int value : values) {
+			if (value != 0 && !appeared.add(value)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
